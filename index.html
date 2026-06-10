@@ -3,19 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <title>Meme Matching Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>MAKINTOUCH MATCHING GAME!</h1>
-        <p class="instructions">
-            Welcome to the Makintouch Meme Matching Game!! Flip over two cards at a time and try to find all the matching pairs. Be quick and remember where you saw the cards!
-        </p>
-        <button id="start-game">Start Game</button>
-        <div id="game-board" class="game-board">
-            <!-- Cards will be generated here -->
+      <div class="deco-top-rule"></div>
+      <header class="game-header">
+        <div class="brand">✦ MAKINTOUCH ✦</div>
+        <h1>Matching Game</h1>
+        <div class="deco-rule"><span>◆</span></div>
+        <p class="instructions">Flip two cards at a time — find all matching pairs.</p>
+      </header>
+
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-label">Moves</span>
+          <span class="stat-value" id="stat-moves">0</span>
         </div>
+        <div class="stat-divider">◆</div>
+        <div class="stat">
+          <span class="stat-label">Pairs</span>
+          <span class="stat-value" id="stat-pairs">0 / 5</span>
+        </div>
+        <div class="stat-divider">◆</div>
+        <div class="stat">
+          <span class="stat-label">Time</span>
+          <span class="stat-value" id="stat-time">0:00</span>
+        </div>
+      </div>
+
+      <button id="start-game">◆ Start Game ◆</button>
+      <div id="game-board" class="game-board"></div>
+      <div class="deco-bottom-rule"><span>◆</span></div>
+    </div>
+
+    <!-- Win Modal -->
+    <div id="win-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-panel">
+        <div class="deco-rule"><span>◆</span></div>
+        <h2 class="modal-title" id="modal-title">Well Played</h2>
+        <div class="deco-rule"><span>◆</span></div>
+        <div class="modal-stats">
+          <div class="modal-stat">
+            <span class="stat-label">Moves Taken</span>
+            <span class="stat-value" id="modal-moves">—</span>
+          </div>
+          <div class="modal-stat">
+            <span class="stat-label">Time Elapsed</span>
+            <span class="stat-value" id="modal-time">—</span>
+          </div>
+        </div>
+        <button id="play-again">◆ Play Again ◆</button>
+      </div>
     </div>
     <script src="script.js"></script>
 </body>

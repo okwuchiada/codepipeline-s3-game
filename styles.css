@@ -1,76 +1,312 @@
+:root {
+  --gold:        #d4af37;
+  --gold-dim:    #8b7320;
+  --gold-faint:  #3a3010;
+  --black:       #0a0a0a;
+  --surface:     #111111;
+  --surface-2:   #1a1a1a;
+  --cream:       #f5f0e0;
+  --muted:       #7a6a4a;
+  --text-label:  #6a5a3a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    font-family: 'Roboto', sans-serif; 
-    background-color: #282c34; 
-    color: #ffffff; 
-    text-align: center;
-    margin: 0;
-    padding: 0;
+  font-family: 'Josefin Sans', sans-serif;
+  background-color: var(--black);
+  color: var(--cream);
+  text-align: center;
+  min-height: 100vh;
+  padding: 20px 16px 40px;
 }
 
 .container {
-    width: auto;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #3c404d; 
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); 
-    border-radius: 15px; 
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 28px;
+  background-color: var(--surface);
+  border: 1px solid var(--gold-dim);
+  outline: 1px solid var(--gold-faint);
+  outline-offset: -6px;
+}
+
+/* ── Decorative rules ── */
+.deco-top-rule,
+.deco-bottom-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+  margin: 0 0 24px;
+  position: relative;
+}
+.deco-bottom-rule { margin: 24px 0 0; }
+
+.deco-rule {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 10px 0;
+}
+.deco-rule::before,
+.deco-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim));
+}
+.deco-rule::after {
+  background: linear-gradient(to left, transparent, var(--gold-dim));
+}
+.deco-rule span {
+  color: var(--gold);
+  font-size: 10px;
+  padding: 0 8px;
+}
+
+/* ── Header ── */
+.game-header { margin-bottom: 20px; }
+
+.brand {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 6px;
+  color: var(--gold);
+  margin-bottom: 6px;
 }
 
 h1 {
-    color: white; 
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
 .instructions {
-    font-size: 20px;
-    margin-bottom: 30px;
-    color: #adbac7;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-label);
+  margin-top: 6px;
+  text-transform: uppercase;
 }
 
+/* ── Buttons ── */
+#start-game,
+#play-again {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  padding: 10px 28px;
+  cursor: pointer;
+  margin: 16px 0;
+  transition: background 0.2s, color 0.2s;
+  text-transform: uppercase;
+}
+#start-game:hover,
+#play-again:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+#start-game:focus,
+#play-again:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+#start-game:active,
+#play-again:active {
+  transform: scale(0.98);
+}
+
+/* ── Game board ── */
 #game-board {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  padding: 20px 0;
 }
 
+/* perspective on each cell */
 .card {
-    width: 211.8px;
-    height: 166.2px;
-    background-color: #565c6f;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  perspective: 800px;
+  cursor: pointer;
+  aspect-ratio: 127 / 100;
 }
 
-.card img {
-    width: 100%;
-    height: auto;
-    visibility: hidden; /* Hide images by default */
-    display: block;
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-.card.show img {
-    visibility: visible; /* Show image when card is flipped */
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
 }
 
-#start-game {
-    background-color: #4caf50;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s, transform 0.3s;
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
-#start-game:hover {
-    background-color: #43a047; /* Darker on hover */
-    transform: scale(1.05); /* Slightly enlarges on hover */
+/* Front — meme image */
+.card-front {
+  transform: rotateY(180deg);
+  background: var(--surface-2);
+}
+.card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Back — Art Deco geometric pattern */
+.card-back {
+  background: var(--surface-2);
+  border: 1px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-back::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--gold-faint);
+}
+.card-back::after {
+  content: '◆';
+  color: var(--gold-faint);
+  font-size: 18px;
+  transition: color 0.3s;
+}
+.card:hover .card-back::after {
+  color: var(--gold-dim);
+}
+
+/* Matched — fade out */
+.card.matched {
+  cursor: default;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid var(--gold-faint);
+  border-bottom: 1px solid var(--gold-faint);
+  padding: 12px 0;
+  margin: 0 0 4px;
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.stat-divider {
+  color: var(--gold-dim);
+  font-size: 10px;
+  padding: 0 8px;
+}
+
+.stat-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--text-label);
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* ── Win modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+  z-index: 100;
+}
+.modal-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-panel {
+  background: var(--surface);
+  border: 1px solid var(--gold-dim);
+  outline: 1px solid var(--gold-faint);
+  outline-offset: -6px;
+  padding: 36px 48px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: 3px;
+  margin: 12px 0;
+}
+
+.modal-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0;
+}
+
+.modal-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+  .container { padding: 20px 14px; }
+  #game-board { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+}
+@media (max-width: 480px) {
+  #game-board { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .modal-panel { padding: 24px 20px; }
+}
+@media (max-width: 340px) {
+  #game-board { grid-template-columns: repeat(2, 1fr); }
 }
